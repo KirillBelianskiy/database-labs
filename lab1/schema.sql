@@ -15,7 +15,7 @@ CREATE TABLE products
     price           NUMERIC(10, 2) NOT NULL CHECK ( price > 0 ),
     stock_quantity  INT            NOT NULL CHECK ( stock_quantity >= 0 ),
     sku             VARCHAR(64)    NOT NULL UNIQUE,
-    manufacturer_id INT            NOT NULL REFERENCES manufacturers (id)
+    manufacturer_id INT            NOT NULL REFERENCES manufacturers (id) ON DELETE RESTRICT
 );
 
 CREATE TABLE customers
@@ -35,13 +35,13 @@ CREATE TABLE orders
         CHECK (status IN ('created', 'paid', 'shipped', 'delivered', 'cancelled')),
     created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     delivery_address VARCHAR(128) NOT NULL,
-    customer_id      INT          NOT NULL REFERENCES customers (id)
+    customer_id      INT          NOT NULL REFERENCES customers (id) ON DELETE RESTRICT
 );
 
 CREATE TABLE order_items
 (
-    order_id   INT            NOT NULL REFERENCES orders (id),
-    product_id INT            NOT NULL REFERENCES products (id),
+    order_id   INT            NOT NULL REFERENCES orders (id) ON DELETE CASCADE,
+    product_id INT            NOT NULL REFERENCES products (id) ON DELETE RESTRICT,
     quantity   INT            NOT NULL CHECK ( quantity > 0 ),
     unit_price NUMERIC(10, 2) NOT NULL CHECK ( unit_price > 0 ),
 
