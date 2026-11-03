@@ -38,7 +38,7 @@ WHERE oi.order_id IS NULL
 GROUP BY p.id, m.name
 ORDER BY p.sku;
 
--- 2.1.3. Нахожу клиентов с минимум двумя доставленными комплектами «ноутбук Dell + периферия».
+-- 2.1.3. Нахожу клиентов с минимум двумя доставленными комплектами "ноутбук Dell + периферия".
 SELECT c.id                 AS customer_id,
        c.email,
        COUNT(DISTINCT o.id) AS qualifying_order_count

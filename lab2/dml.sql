@@ -81,8 +81,7 @@ FROM products p
 WHERE p.stock_quantity = 0
   AND m.name = 'Dell';
 
--- 1.2.4. Удаляю только созданный тестовый заказ; его позиции должны удалиться через ON DELETE CASCADE.
--- Остальные товары и заказы сохраняются; RESTRICT не позволяет удалить используемые в заказах товары.
+-- 1.2.4. Удаляю только созданный тестовый заказ
 DELETE
 FROM orders
 WHERE customer_id = (SELECT id
@@ -93,7 +92,6 @@ RETURNING id;
 
 -- Проверяю каскадное удаление: у удалённого заказа должно остаться 0 позиций.
 -- currval возвращает ID последнего заказа, созданного именно в этой сессии, без угадывания номера.
--- Между созданием тестового заказа и проверками другие заказы в этой сессии не вставляются.
 SELECT COUNT(*) AS remaining_item_count
 FROM order_items
 WHERE order_id = CURRVAL(PG_GET_SERIAL_SEQUENCE('orders', 'id'));
